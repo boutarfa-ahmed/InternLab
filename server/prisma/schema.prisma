@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  COMPANY
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+}
+
+enum InternshipDomain {
+  WEB
+  MOBILE
+  DATA
+  CYBERSECURITY
+  AI
+  DEVOPS
+  DESIGN
+  MARKETING
+  OTHER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  role         Role     @default(STUDENT)
+  isVerified   Boolean  @default(false)
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  studentProfile StudentProfile?
+  companyProfile CompanyProfile?
+  applications   Application[]
+  notifications  Notification[]
+
+  @@map("users")
+}
+
+model StudentProfile {
+  id         String   @id @default(cuid())
+  firstName  String
+  lastName   String
+  bio        String?
+  university String?
+  level      String?
+  skills     String[]
+  cvUrl      String?
+  avatarUrl  String?
+  linkedin   String?
+  github     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("student_profiles")
+}
+
+model CompanyProfile {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  sector      String?
+  size        String?
+  website     String?
+  logoUrl     String?
+  location    String?
+  linkedin    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String       @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  internships Internship[]
+
+  @@map("company_profiles")
+}
+
+model Internship {
+  id           String           @id @default(cuid())
+  title        String
+  description  String
+  domain       InternshipDomain @default(OTHER)
+  duration     Int
+  location     String
+  isRemote     Boolean          @default(false)
+  isPaid       Boolean          @default(false)
+  salary       Float?
+  requirements String[]
+  isActive     Boolean          @default(true)
+  deadline     DateTime?
+  startDate    DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  companyId    String
+  company      CompanyProfile  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@map("internships")
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  coverLetter String?
+  cvUrl       String
+  status      ApplicationStatus @default(PENDING)
+  companyNote String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  studentId    String
+  student      User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  internshipId String
+  internship   Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, internshipId])
+  @@map("applications")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
