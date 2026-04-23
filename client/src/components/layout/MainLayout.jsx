@@ -7,22 +7,22 @@ import {
 
 const studentNav = [
   { to: '/student', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/student/internships', label: 'Offres de stage', icon: Search },
-  { to: '/student/applications', label: 'Mes candidatures', icon: FileText },
-  { to: '/student/profile', label: 'Mon profil', icon: User },
+  { to: '/student/internships', label: 'Internship Offers', icon: Search },
+  { to: '/student/applications', label: 'My Applications', icon: FileText },
+  { to: '/student/profile', label: 'My Profile', icon: User },
 ]
 
 const companyNav = [
   { to: '/company', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/company/post', label: 'Publier une offre', icon: PlusCircle },
-  { to: '/company/applications', label: 'Candidatures', icon: Users },
-  { to: '/company/profile', label: 'Profil entreprise', icon: Briefcase },
+  { to: '/company/post', label: 'Post an Offer', icon: PlusCircle },
+  { to: '/company/applications', label: 'Applications', icon: Users },
+  { to: '/company/profile', label: 'Company Profile', icon: Briefcase },
 ]
 
 const adminNav = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/users', label: 'Utilisateurs', icon: Users },
-  { to: '/admin/settings', label: 'Paramètres', icon: Settings },
+  { to: '/admin/users', label: 'Users', icon: Users },
+  { to: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 export default function MainLayout() {
@@ -44,8 +44,8 @@ export default function MainLayout() {
         <div className="p-6 border-b border-gray-100">
           <h1 className="text-xl font-bold text-primary-600">InternLab</h1>
           <p className="text-xs text-gray-500 mt-1">
-            {user?.role === 'STUDENT' ? '🎓 Étudiant' :
-             user?.role === 'COMPANY' ? '🏢 Entreprise' : '⚙️ Admin'}
+            {user?.role === 'STUDENT' ? 'Student' :
+             user?.role === 'COMPANY' ? 'Company' : 'Admin'}
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default function MainLayout() {
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
             <LogOut size={16} />
-            Déconnexion
+            Logout
           </button>
         </div>
       </aside>

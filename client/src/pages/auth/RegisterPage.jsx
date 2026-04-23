@@ -7,12 +7,12 @@ import api from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 
 const registerSchema = z.object({
-  email: z.string().email('Email invalide'),
-  password: z.string().min(6, 'Minimum 6 caractères'),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Minimum 6 characters'),
   confirmPassword: z.string(),
-  role: z.enum(['STUDENT', 'COMPANY'], { required_error: 'Choisissez un rôle' }),
+  role: z.enum(['STUDENT', 'COMPANY'], { required_error: 'Choose a role' }),
 }).refine((d) => d.password === d.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
+  message: 'Passwords do not match',
   path: ['confirmPassword'],
 })
 
@@ -39,7 +39,7 @@ export default function RegisterPage() {
       if (user.role === 'STUDENT') navigate('/student')
       else navigate('/company')
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de l\'inscription')
+      setError(err.response?.data?.message || 'Registration failed')
     }
   }
 
@@ -48,13 +48,13 @@ export default function RegisterPage() {
       <div className="card w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-primary-600 mb-1">InternLab</h1>
-          <p className="text-gray-600">Créer votre compte</p>
+          <p className="text-gray-600">Create your account</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-6">
           {[
-            { value: 'STUDENT', label: '🎓 Étudiant', sub: 'Je cherche un stage' },
-            { value: 'COMPANY', label: '🏢 Entreprise', sub: 'Je recrute' },
+            { value: 'STUDENT', label: 'Student', sub: 'I am looking for an internship' },
+            { value: 'COMPANY', label: 'Company', sub: 'I am recruiting' },
           ].map(({ value, label, sub }) => (
             <label
               key={value}
@@ -85,13 +85,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input {...register('password')} type="password" placeholder="••••••••" className="input-field" />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
             <input {...register('confirmPassword')} type="password" placeholder="••••••••" className="input-field" />
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>}
           </div>
@@ -103,13 +103,13 @@ export default function RegisterPage() {
           )}
 
           <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-2.5">
-            {isSubmitting ? 'Inscription...' : 'Créer mon compte'}
+            {isSubmitting ? 'Creating account...' : 'Create my account'}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Déjà un compte ?{' '}
-          <Link to="/login" className="text-primary-600 font-medium hover:underline">Se connecter</Link>
+          Already have an account?{' '}
+          <Link to="/login" className="text-primary-600 font-medium hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

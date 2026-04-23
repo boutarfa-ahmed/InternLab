@@ -7,8 +7,8 @@ import api from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 
 const loginSchema = z.object({
-  email: z.string().email('Email invalide'),
-  password: z.string().min(6, 'Mot de passe trop court'),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Password too short'),
 })
 
 export default function LoginPage() {
@@ -31,7 +31,7 @@ export default function LoginPage() {
       else if (user.role === 'COMPANY') navigate('/company')
       else navigate('/admin')
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur de connexion')
+      setError(err.response?.data?.message || 'Login failed')
     }
   }
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
       <div className="card w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-primary-600 mb-1">InternLab</h1>
-          <p className="text-gray-600">Connexion à votre compte</p>
+          <p className="text-gray-600">Sign in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -56,7 +56,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               {...register('password')}
               type="password"
@@ -73,14 +73,14 @@ export default function LoginPage() {
           )}
 
           <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-2.5">
-            {isSubmitting ? 'Connexion...' : 'Se connecter'}
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Pas encore de compte ?{' '}
+          Don't have an account?{' '}
           <Link to="/register" className="text-primary-600 font-medium hover:underline">
-            S'inscrire
+            Sign up
           </Link>
         </p>
       </div>
